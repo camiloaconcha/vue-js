@@ -10,18 +10,17 @@
 
 <body>
     <div id="app">
-        <span v-text="message"></span>
+        <span c-text="SJ"></span>
         <br/>
-        <input type="text" v-model="message">
+        <input type="text" c-model="message">
     </div>
-    <script src="https://unpkg.com/vue@next"></script>
-
+<script src='framework.js'></script>
     <script>
-        const { createApp } = Vue;
+        const { createApp } = Camilo;
         const app = createApp({
             data() {
                 return {
-                    message: "Hola vue!"
+                    message: "Hola Camilo!"
                 };
             }
         });
