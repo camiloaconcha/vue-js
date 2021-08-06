@@ -1,34 +1,41 @@
-class CamiloReactive {
-  //Depedencias
+class PlatziReactive {
+  // Dependencias
   deps = new Map();
 
-  constructor({data}) {
+  /*
+    options:
+      data() => { ... }
+  */
+  constructor({ data }) {
     this.origen = data();
 
     const self = this;
 
-    //Destino
+    // Destino
     this.$data = new Proxy(this.origen, {
       get(target, name) {
+        /* if (name in target) {
+          return target[name];
+        } */
         if (Reflect.has(target, name)) {
           self.track(target, name);
           return Reflect.get(target, name);
         }
-        console.warn("la propiedad", name, "no existe");
+        console.warn("La propiedad", name, "no existe");
         return "";
       },
       set(target, name, value) {
         Reflect.set(target, name, value);
         self.trigger(name);
-      },
+      }
     });
   }
 
   track(target, name) {
     if (!this.deps.has(name)) {
       const effect = () => {
-        document.querySelectorAll(`*[c-text=${name}]`).forEach(el => {
-          this.cText(el, target, name);
+        document.querySelectorAll(`*[p-text=${name}]`).forEach(el => {
+          this.pText(el, target, name);
         });
       };
       this.deps.set(name, effect);
@@ -40,13 +47,13 @@ class CamiloReactive {
   }
 
   mount() {
-    document.querySelectorAll("*[c-text]").forEach(el => {
-      this.cText(el, this.$data, el.getAttribute("c-text"));
+    document.querySelectorAll("*[p-text]").forEach(el => {
+      this.pText(el, this.$data, el.getAttribute("p-text"));
     });
 
-    document.querySelectorAll("*[c-model]").forEach(el => {
-      const name = el.getAttribute("c-model");
-      this.cModel(el, this.$data, name);
+    document.querySelectorAll("*[p-model]").forEach(el => {
+      const name = el.getAttribute("p-model");
+      this.pModel(el, this.$data, name);
 
       el.addEventListener("input", () => {
         Reflect.set(this.$data, name, el.value);
@@ -54,16 +61,17 @@ class CamiloReactive {
     });
   }
 
-  cText(el, target, name) {
+  pText(el, target, name) {
     el.innerText = Reflect.get(target, name);
   }
-  cModel(el, target, name) {
+
+  pModel(el, target, name) {
     el.value = Reflect.get(target, name);
   }
 }
 
-var Camilo = {
+var Platzi = {
   createApp(options) {
-    return new CamiloReactive(options);
-  },
+    return new PlatziReactive(options);
+  }
 };

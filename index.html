@@ -10,7 +10,7 @@
 
 <body>
     <div id="app">
-        <span c-text="SJ"></span>
+        <span c-text="message"></span>
         <br/>
         <input type="text" c-model="message">
     </div>
@@ -20,12 +20,13 @@
         const app = createApp({
             data() {
                 return {
-                    message: "Hola Camilo!"
+                    message: "Hola Camilo!",
+                    otro:"Hey"
                 };
             }
         });
 
-        app.mount("#app");
+        app.mount();
     </script>
 
 </body>
